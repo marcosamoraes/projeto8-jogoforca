@@ -9,5 +9,3 @@ export const GameDiv = styled.div`
   flex-direction: column;
   font-family: "Roboto", sans-serif !important;
 `;
-
-export default AppStyles;
