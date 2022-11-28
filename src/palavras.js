@@ -9,6 +9,7 @@ const palavras = [
     "harmonia", "haste", "hectare", "hepatite", "hiena", "hidrante",
     "igreja", "importante", "idoso", "irado", "identidade", "idioma", "idade", "idiota",
     "jantar", "jumento", "jararaca", "janela", "jerimum", "jaula", "jabuti", "jaleco",
+    "palhaço", "paçoca", "açaí", "açúcar", "pinça", "cachaça", "caçula", "paçoca",
     "laranja", "lua", "luz", "lindo", "lacraia", "lactose", "lacrar",
     "manga", "morango", "mico", "matar", "mingau", "moqueca", "mocassin",
     "nectarina", "nada", "navio", "namorado", "ninja", "natal", "narciso", "narina", "nabo",
