@@ -38,9 +38,10 @@ const App = () => {
     }
 
     function guessLetter(letter) {
-        const newLetters = letters.map(letter => {
-            if (letter.letter === letter) letter.disabled = true;
-            return letter;
+        const newLetters = letters.map(letterMap => {
+            console.log(letterMap)
+            if (letterMap.letter === letter) letterMap.disabled = true;
+            return letterMap;
         });
         setLetters(newLetters);
         let changes = 0;
