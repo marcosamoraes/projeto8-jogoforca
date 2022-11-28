@@ -39,7 +39,6 @@ const App = () => {
 
     function guessLetter(letter) {
         const newLetters = letters.map(letterMap => {
-            console.log(letterMap)
             if (letterMap.letter === letter) letterMap.disabled = true;
             return letterMap;
         });
