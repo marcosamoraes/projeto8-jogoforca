@@ -20,12 +20,76 @@ const hangmanImages = [
 ];
 
 const App = () => {
+    const alphaAscii = Array.from(Array(26)).map((e, i) => i + 97);
+
+    const [hangmanImage, setHangmanImage] = useState(hangmanImages[0]);
+    const [letters, setLetters] = useState(alphaAscii.map((x) => ({disabled: true, letter: String.fromCharCode(x)})));
+    const [wordProgress, setWordProgress] = useState([]);
+    const [guessInput, setGuessInput] = useState("");
+    const [disableGuess, setDisableGuess] = useState(true);
+
+    function chooseWord() {
+        let word = palavras[Math.floor(Math.random() * palavras.length)];
+        setHangmanImage(hangmanImages[0]);
+        setWordProgress(word.split("").map(letter => ({letter: letter, isDiscovered: false})));
+        setLetters(alphaAscii.map((x) => ({disabled: false, letter: String.fromCharCode(x)})));
+        setGuessInput("");
+        setDisableGuess(false);
+    }
+
+    function guessLetter(letter) {
+        const newLetters = letters.map(letter => {
+            if (letter.letter === letter) letter.disabled = true;
+            return letter;
+        });
+        setLetters(newLetters);
+        let changes = 0;
+        const newWordProgress = wordProgress.map(letterProgress => {
+            if (letterProgress.letter.normalize("NFD").replace(/[\u0300-\u036f]/g, "") === letter) {
+                changes++;
+                letterProgress.isDiscovered = true;
+            }
+            return letterProgress;
+        });
+        if (changes !== 0) {
+            setWordProgress(newWordProgress);
+            if (wordProgress.filter(letterProgress => letterProgress.isDiscovered).length === wordProgress.length) {
+                endGame(true);
+            }
+        } else {
+            let indexOf = Array.prototype.indexOf.call(hangmanImages, hangmanImage);
+            setHangmanImage(hangmanImages[indexOf + 1] ? hangmanImages[indexOf + 1] : hangmanImages[hangmanImages.length - 1]);
+            if (indexOf === hangmanImages.length - 2) {
+                endGame(false);
+            }
+        }
+    }
+
+    function guess() {
+        let canGuess = wordProgress.filter(letterProgress => letterProgress.isDiscovered === false).length;
+        if (canGuess > 0 && guessInput !== "") {
+            let word = wordProgress.map(letterProgress => letterProgress.letter).join("");
+            if (word === guessInput) {
+                endGame(true);
+            } else {
+                setHangmanImage(hangmanImages[hangmanImages.length - 1]);
+                endGame(false);
+            }
+        }
+    }
+
+    function endGame(success) {
+        setLetters(letters.map(letter => ({letter: letter.letter, disabled: true})));
+        setWordProgress(wordProgress.map(letterProgress => ({letter: letterProgress.letter, isDiscovered: true, success})));
+        setDisableGuess(true);
+    }
+
     return (
         <GameDiv>
             <Reset></Reset>
-            <Game></Game>
-            <Letters></Letters>
-            <Guess></Guess>
+            <Game hangmanImage={hangmanImage} chooseWord={chooseWord} wordProgress={wordProgress}></Game>
+            <Letters letters={letters} guessLetter={guessLetter}></Letters>
+            <Guess guess={guess} guessInput={guessInput} setGuessInput={setGuessInput} isDisabled={disableGuess}></Guess>
         </GameDiv>
     );
 };
